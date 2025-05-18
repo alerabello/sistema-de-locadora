@@ -3,6 +3,11 @@
 yum update -y
 yum install -y git python3 at
 
+# Instalar GitHub CLI
+yum install -y yum-utils
+yum-config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+yum install -y gh
+
 # Habilitar o serviço atd (necessário para agendamento com 'at')
 systemctl enable atd
 systemctl start atd
