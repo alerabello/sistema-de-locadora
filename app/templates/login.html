@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<style>
+  body {
+    background-color: #141414;
+    color: #fff;
+  }
+</style>
+<div class="container mt-5 text-white">
+  <h2>Login</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.email.label }} {{ form.email(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.senha.label }} {{ form.senha(class="form-control") }}
+    </div>
+    <div class="form-check mb-3">
+      {{ form.lembrar(class="form-check-input") }} {{ form.lembrar.label }}
+    </div>
+    {{ form.submit(class="btn btn-primary") }}
+  </form>
+</div>
+{% endblock %}

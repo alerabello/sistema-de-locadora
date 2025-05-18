@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Cadastro{% endblock %}
+{% block content %}
+<style>
+  body {
+    background-color: #141414;
+    color: #fff;
+  }
+</style>
+<div class="container mt-5 text-white">
+  <h2>Cadastro</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.nome.label }} {{ form.nome(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.email.label }} {{ form.email(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.senha.label }} {{ form.senha(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.confirmar.label }} {{ form.confirmar(class="form-control") }}
+    </div>
+    {{ form.submit(class="btn btn-success") }}
+  </form>
+</div>
+{% endblock %}
