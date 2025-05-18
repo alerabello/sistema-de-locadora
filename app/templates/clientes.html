@@ -2,8 +2,8 @@
 {% block title %}Clientes{% endblock %}
 {% block content %}
 <div class="container mt-5 text-white">
-  <h2>Clientes</h2>
-  <a href="{{ url_for('main.novo_cliente') }}" class="btn btn-success mb-3">Novo Cliente</a>
+  <h2 class="mb-4">📋 Lista de Clientes</h2>
+  <a href="{{ url_for('main.novo_cliente') }}" class="btn btn-success mb-3">+ Novo Cliente</a>
   <table class="table table-dark table-hover">
     <thead>
       <tr>
@@ -20,8 +20,8 @@
         <td>{{ cliente.email }}</td>
         <td>{{ cliente.telefone }}</td>
         <td>
-          <a href="{{ url_for('main.editar_cliente', id=cliente.id) }}" class="btn btn-sm btn-warning">Editar</a>
-          <a href="{{ url_for('main.excluir_cliente', id=cliente.id) }}" class="btn btn-sm btn-danger">Excluir</a>
+          <a href="{{ url_for('main.editar_cliente', id=cliente.id) }}" class="btn btn-warning btn-sm">✏️ Editar</a>
+          <a href="{{ url_for('main.excluir_cliente', id=cliente.id) }}" class="btn btn-danger btn-sm">🗑️ Excluir</a>
         </td>
       </tr>
       {% endfor %}
