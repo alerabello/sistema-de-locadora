@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Gerenciar Filmes{% endblock %}
+{% block content %}
+<div class="container mt-5 text-white">
+  <h2 class="mb-4">🎬 Gerenciar Filmes</h2>
+  <a href="{{ url_for('main.novo_filme') }}" class="btn btn-success mb-3">➕ Novo Filme</a>
+
+  {% if filmes %}
+    <div class="table-responsive">
+      <table class="table table-dark table-bordered">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Ano</th>
+            <th>Cartaz</th>
+            <th>Disponível</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for filme in filmes %}
+          <tr>
+            <td>{{ filme.titulo }}</td>
+            <td>{{ filme.ano }}</td>
+            <td>
+              {% if filme.cartaz_url %}
+                <img src="{{ filme.cartaz_url }}" alt="Cartaz" style="height: 80px;">
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>
+              {% if filme.disponivel %}
+                <span class="badge bg-success">Sim</span>
+              {% else %}
+                <span class="badge bg-danger">Não</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ url_for('main.excluir_filme', id=filme.id) }}" class="btn btn-sm btn-danger">Excluir</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>Nenhum filme cadastrado.</p>
+  {% endif %}
+</div>
+{% endblock %}

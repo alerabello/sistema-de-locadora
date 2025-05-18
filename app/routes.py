@@ -184,6 +184,14 @@ def excluir_locacao(id):
     flash("Locação excluída com sucesso.")
     return redirect(url_for('main.locacoes'))
 
+@main.route('/filmes')
+@login_required
+def listar_filmes():
+    if not current_user.is_admin:
+        abort(403)
+    filmes = Filme.query.all()
+    return render_template('filmes_admin.html', filmes=filmes, show_back_button=True)
+
 @main.route('/filmes/novo', methods=['GET', 'POST'])
 @login_required
 def novo_filme():
@@ -204,3 +212,14 @@ def novo_filme():
             flash("Preencha todos os campos.")
 
     return render_template('novo_filme.html', titulo="Novo Filme", show_back_button=True)
+
+@main.route('/filmes/<int:id>/excluir')
+@login_required
+def excluir_filme(id):
+    if not current_user.is_admin:
+        abort(403)
+    filme = Filme.query.get_or_404(id)
+    db.session.delete(filme)
+    db.session.commit()
+    flash("Filme excluído com sucesso.")
+    return redirect(url_for('main.listar_filmes'))

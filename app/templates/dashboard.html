@@ -21,11 +21,14 @@
       <a href="{{ url_for('main.usuarios') }}" class="text-white">👤 Gerenciar Usuários</a>
     </li>
     <li class="list-group-item bg-dark">
+      <a href="{{ url_for('main.listar_filmes') }}" class="btn btn-outline-light">🎬 Gerenciar Filmes</a>
+    </li>
+    <li class="list-group-item bg-dark">
       <a href="{{ url_for('main.novo_filme') }}" class="text-white">➕ Cadastrar Novo Filme</a>
     </li>
     <li class="list-group-item bg-dark">
       <a href="{{ url_for('main.logout') }}" class="text-white">🚪 Sair</a>
-    </li>
+    </li>    
   </ul>
 </div>
 {% endblock %}
