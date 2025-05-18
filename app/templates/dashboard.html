@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}Painel do Administrador{% endblock %}
 {% block content %}
 <div class="container mt-5 text-white">
-  <h2>Bem-vindo, {{ current_user.nome }}</h2>
-  <p class="lead">Acesse as opções no menu para gerenciar o sistema.</p>
-
-  <ul class="list-group list-group-flush">
+  <h2>
+    Bem-vindo, {{ current_user.nome }}
     {% if current_user.is_admin %}
+      <span class="badge bg-danger">Administrador</span>
+    {% endif %}
+  </h2>
+  <p class="lead">Acesse as opções abaixo para gerenciar o sistema.</p>
+
+  <ul class="list-group list-group-flush mt-4">
     <li class="list-group-item bg-dark">
       <a href="{{ url_for('main.clientes') }}" class="text-white">👥 Gerenciar Clientes</a>
     </li>
@@ -19,7 +23,6 @@
     <li class="list-group-item bg-dark">
       <a href="{{ url_for('main.novo_filme') }}" class="text-white">➕ Cadastrar Novo Filme</a>
     </li>
-    {% endif %}
     <li class="list-group-item bg-dark">
       <a href="{{ url_for('main.logout') }}" class="text-white">🚪 Sair</a>
     </li>
