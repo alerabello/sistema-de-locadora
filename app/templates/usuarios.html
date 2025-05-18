@@ -1,43 +1,28 @@
 {% extends 'base.html' %}
-{% block title %}Gerenciar Usuários{% endblock %}
+{% block title %}Usuários{% endblock %}
 {% block content %}
-
-<div class="container mt-5">
-  <h2 class="text-white">👤 Gerenciar Usuários</h2>
-  <p class="text-white">Promova ou remova permissões de administrador.</p>
-
-  <table class="table table-dark table-bordered table-hover mt-4">
+<div class="container mt-5 text-white">
+  <h2 class="mb-4">Lista de Usuários</h2>
+  <table class="table table-bordered table-dark">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Nome</th>
         <th>Email</th>
-        <th>Admin?</th>
+        <th>Admin</th>
         <th>Ações</th>
       </tr>
     </thead>
     <tbody>
       {% for usuario in usuarios %}
       <tr>
-        <td>{{ usuario.id }}</td>
         <td>{{ usuario.nome }}</td>
         <td>{{ usuario.email }}</td>
+        <td>{{ 'Sim' if usuario.is_admin else 'Não' }}</td>
         <td>
-          {% if usuario.is_admin %}
-            <span class="badge bg-success">Sim</span>
+          {% if not usuario.is_admin %}
+            <a href="{{ url_for('main.promover_usuario', id=usuario.id) }}" class="btn btn-success btn-sm">Promover</a>
           {% else %}
-            <span class="badge bg-secondary">Não</span>
-          {% endif %}
-        </td>
-        <td>
-          {% if usuario.id != current_user.id %}
-            {% if usuario.is_admin %}
-              <a href="{{ url_for('main.rebaixar_usuario', id=usuario.id) }}" class="btn btn-warning btn-sm">Rebaixar</a>
-            {% else %}
-              <a href="{{ url_for('main.promover_usuario', id=usuario.id) }}" class="btn btn-primary btn-sm">Promover</a>
-            {% endif %}
-          {% else %}
-            <span class="text-muted">Você</span>
+            <a href="{{ url_for('main.rebaixar_usuario', id=usuario.id) }}" class="btn btn-warning btn-sm">Rebaixar</a>
           {% endif %}
         </td>
       </tr>
@@ -45,5 +30,4 @@
     </tbody>
   </table>
 </div>
-
 {% endblock %}

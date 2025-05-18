@@ -33,28 +33,50 @@ chown -R ec2-user:ec2-user /home/ec2-user/sistema-de-locadora/instance/
 # Criar banco (executar app brevemente)
 python3 run.py & sleep 5 && pkill -f run.py
 
-# Criar usuário administrador diretamente
-cat <<EOF > create_admin.py
+# Criar script admin + dados fake
+cat <<EOF > seed_data.py
 from app import db
-from app.models import Usuario
+from app.models import Usuario, Filme
 from werkzeug.security import generate_password_hash
+from run import app
+import random
 
-admin = Usuario.query.filter_by(email="admin@email.com").first()
-if not admin:
-    novo = Usuario(
-        nome="Administrador",
-        email="admin@email.com",
-        senha=generate_password_hash("admin123"),
-        is_admin=True
-    )
-    db.session.add(novo)
+with app.app_context():
+    # Admin
+    if not Usuario.query.filter_by(email="admin@email.com").first():
+        admin = Usuario(
+            nome="Administrador",
+            email="admin@email.com",
+            senha=generate_password_hash("admin123"),
+            is_admin=True
+        )
+        db.session.add(admin)
+
+    # Usuários comuns
+    for i in range(5):
+        email = f"user{i}@email.com"
+        if not Usuario.query.filter_by(email=email).first():
+            user = Usuario(
+                nome=f"Usuário {i}",
+                email=email,
+                senha=generate_password_hash("user123"),
+                is_admin=False
+            )
+            db.session.add(user)
+
+    # Filmes
+    titulos = ["Matrix", "O Senhor dos Anéis", "Interestelar", "Gladiador", "Avatar", "Top Gun", "Vingadores"]
+    anos = [1999, 2001, 2014, 2000, 2009, 1986, 2012]
+    for i in range(len(titulos)):
+        if not Filme.query.filter_by(titulo=titulos[i]).first():
+            db.session.add(Filme(titulo=titulos[i], ano=anos[i], disponivel=True))
+
     db.session.commit()
-    print("✅ Admin criado com sucesso")
-else:
-    print("⚠️ Admin já existe")
+    print("✅ Dados de exemplo criados com sucesso")
 EOF
 
-python3 create_admin.py
+# Executar o seed
+python3 seed_data.py
 
 # Criar serviço systemd
 cat <<EOF > /etc/systemd/system/flaskapp.service

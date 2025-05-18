@@ -201,4 +201,5 @@ def novo_filme():
             return redirect(url_for('main.dashboard'))
         else:
             flash("Preencha todos os campos.")
-    return render_template('novo_filme.html')
+
+    return render_template('novo_filme.html', titulo="Novo Filme", show_back_button=True)
