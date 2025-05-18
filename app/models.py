@@ -27,6 +27,8 @@ class Filme(db.Model):
     genero = db.Column(db.String(50))
     ano = db.Column(db.Integer)
     disponivel = db.Column(db.Boolean, default=True)
+    cartaz_url = db.Column(db.String(255), nullable=True)
+
 
 class Locacao(db.Model):
     __tablename__ = 'locacoes'
