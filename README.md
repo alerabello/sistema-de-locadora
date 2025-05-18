@@ -11,6 +11,11 @@ Este é um sistema web desenvolvido com Flask, seguindo princípios de Engenhari
 - Gerenciamento de locações (CRUD, com múltiplos filmes por locação)
 - Interface responsiva com Bootstrap
 - Testes automatizados com unittest e Selenium
+- Relatórios de locações por período
+- Exportação de dados em CSV
+- Recuperação de senha por e-mail
+- Filtros avançados de busca para filmes e clientes
+- Dashboard com estatísticas do sistema
 
 ## Como rodar localmente
 

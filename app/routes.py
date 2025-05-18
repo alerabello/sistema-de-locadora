@@ -223,3 +223,18 @@ def excluir_filme(id):
     db.session.commit()
     flash("Filme excluído com sucesso.")
     return redirect(url_for('main.listar_filmes'))
+    
+@main.cli.command("seed_filmes")
+def seed_filmes():
+    exemplos = [
+        {"titulo": "O Poderoso Chefão", "ano": 1972, "cartaz_url": "https://m.media-amazon.com/images/I/71xBLRBYOiL._AC_SY679_.jpg"},
+        {"titulo": "Interestelar", "ano": 2014, "cartaz_url": "https://m.media-amazon.com/images/I/91kFYg4fX3L._AC_SY679_.jpg"},
+        {"titulo": "Clube da Luta", "ano": 1999, "cartaz_url": "https://m.media-amazon.com/images/I/81D+KJkO6-L._AC_SY679_.jpg"},
+        {"titulo": "Forrest Gump", "ano": 1994, "cartaz_url": "https://m.media-amazon.com/images/I/61OUGpUfAyL._AC_SY679_.jpg"},
+        {"titulo": "A Origem", "ano": 2010, "cartaz_url": "https://m.media-amazon.com/images/I/81p+xe8cbnL._AC_SY679_.jpg"},
+    ]
+    for f in exemplos:
+        filme = Filme(titulo=f["titulo"], ano=f["ano"], cartaz_url=f["cartaz_url"], disponivel=True)
+        db.session.add(filme)
+    db.session.commit()
+    print("🎉 Filmes de exemplo adicionados com sucesso.")
