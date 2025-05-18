@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Locações{% endblock %}
 {% block content %}
+<style>
+  body {
+    background-color: #141414;
+    color: #fff;
+  }
+</style>
 <div class="container mt-5 text-white">
   <h2 class="mb-4">🎞️ Histórico de Locações</h2>
   <a href="{{ url_for('main.nova_locacao') }}" class="btn btn-success mb-3">+ Nova Locação</a>

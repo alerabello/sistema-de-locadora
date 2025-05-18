@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}{{ titulo }}{% endblock %}
 {% block content %}
+<style>
+  body {
+    background-color: #141414;
+    color: #fff;
+  }
+</style>
 <div class="container mt-5 text-white">
   <h2 class="mb-4">{{ titulo }}</h2>
   <form method="POST">
