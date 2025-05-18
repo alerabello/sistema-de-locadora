@@ -3,11 +3,6 @@
 {% block content %}
 
 <style>
-  body {
-    background-color: #141414;
-    color: #fff;
-  }
-
   .hero {
     height: 70vh;
     display: flex;
@@ -28,6 +23,11 @@
   .hero .btn-group a {
     min-width: 140px;
   }
+
+  .card-img-top {
+    max-height: 350px;
+    object-fit: cover;
+  }
 </style>
 
 <div class="hero text-center">
@@ -45,6 +45,9 @@
   {% for filme in filmes %}
   <div class="col">
     <div class="card bg-dark border-secondary h-100">
+      {% if filme.cartaz_url %}
+      <img src="{{ filme.cartaz_url }}" class="card-img-top" alt="Cartaz de {{ filme.titulo }}">
+      {% endif %}
       <div class="card-body">
         <h5 class="card-title">{{ filme.titulo }}</h5>
         <p class="card-text">Ano: {{ filme.ano }}</p>

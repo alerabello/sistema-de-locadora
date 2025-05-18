@@ -21,7 +21,7 @@ def login():
             login_user(usuario, remember=form.lembrar.data)
             return redirect(url_for('main.dashboard'))
         flash('Login inválido')
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, show_back_button=True)
 
 @main.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
@@ -40,7 +40,7 @@ def cadastro():
         db.session.commit()
         flash('Cadastro realizado com sucesso! Faça login.')
         return redirect(url_for('main.login'))
-    return render_template('cadastro.html', form=form)
+    return render_template('cadastro.html', form=form, show_back_button=True)
 
 @main.route('/logout')
 @login_required
@@ -55,7 +55,7 @@ def dashboard():
         return render_template('dashboard.html')
     else:
         filmes = Filme.query.filter_by(disponivel=True).all()
-        return render_template('filmes.html', filmes=filmes)
+        return render_template('filmes.html', filmes=filmes, show_back_button=True)
 
 @main.route('/usuarios')
 @login_required
@@ -63,7 +63,7 @@ def usuarios():
     if not current_user.is_admin:
         abort(403)
     lista = Usuario.query.all()
-    return render_template('usuarios.html', usuarios=lista)
+    return render_template('usuarios.html', usuarios=lista, show_back_button=True)
 
 @main.route('/usuarios/<int:id>/promover')
 @login_required
@@ -93,7 +93,7 @@ def clientes():
     if not current_user.is_admin:
         abort(403)
     lista = Cliente.query.all()
-    return render_template('clientes.html', clientes=lista)
+    return render_template('clientes.html', clientes=lista, show_back_button=True)
 
 @main.route('/clientes/novo', methods=['GET', 'POST'])
 @login_required
@@ -142,7 +142,7 @@ def locacoes():
     if not current_user.is_admin:
         abort(403)
     lista = Locacao.query.all()
-    return render_template('locacoes.html', locacoes=lista)
+    return render_template('locacoes.html', locacoes=lista, show_back_button=True)
 
 @main.route('/locacoes/nova', methods=['GET', 'POST'])
 @login_required
@@ -193,8 +193,9 @@ def novo_filme():
     if request.method == 'POST':
         titulo = request.form.get('titulo')
         ano = request.form.get('ano')
-        if titulo and ano:
-            filme = Filme(titulo=titulo, ano=ano, disponivel=True)
+        cartaz_url = request.form.get('cartaz_url')
+        if titulo and ano and cartaz_url:
+            filme = Filme(titulo=titulo, ano=ano, disponivel=True, cartaz_url=cartaz_url)
             db.session.add(filme)
             db.session.commit()
             flash("Filme cadastrado com sucesso.")

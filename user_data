@@ -4,79 +4,101 @@
 yum update -y
 yum install -y git python3 at
 
-# Instalar GitHub CLI (opcional, mas incluso aqui)
+# Instalar GitHub CLI
 yum install -y yum-utils
 yum-config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
 yum install -y gh
 
-# Iniciar serviço atd para agendamento
+# Iniciar serviço atd
 systemctl enable atd
 systemctl start atd
 
-# Clonar o projeto
+# Clonar projeto
 cd /home/ec2-user
 git clone https://github.com/alerabello/sistema-de-locadora.git
 cd sistema-de-locadora
 
-# Criar ambiente virtual e instalar dependências
+# Criar ambiente virtual
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Corrigir permissões do banco SQLite
-mkdir -p /home/ec2-user/sistema-de-locadora/instance
-touch /home/ec2-user/sistema-de-locadora/instance/locadora.db
-chmod -R 775 /home/ec2-user/sistema-de-locadora/instance/
-chown -R ec2-user:ec2-user /home/ec2-user/sistema-de-locadora/instance/
-
-# Criar banco (executar app brevemente)
+# Criar banco
+mkdir -p instance
+touch instance/locadora.db
+chmod -R 775 instance/
+chown -R ec2-user:ec2-user instance/
 python3 run.py & sleep 5 && pkill -f run.py
 
-# Criar script admin + dados fake
-cat <<EOF > seed_data.py
+# Criar script de admin
+cat <<EOF > create_admin.py
 from app import db
-from app.models import Usuario, Filme
+from app.models import Usuario
 from werkzeug.security import generate_password_hash
 from run import app
-import random
-
 with app.app_context():
-    # Admin
     if not Usuario.query.filter_by(email="admin@email.com").first():
-        admin = Usuario(
+        db.session.add(Usuario(
             nome="Administrador",
             email="admin@email.com",
             senha=generate_password_hash("admin123"),
             is_admin=True
-        )
-        db.session.add(admin)
-
-    # Usuários comuns
-    for i in range(5):
-        email = f"user{i}@email.com"
-        if not Usuario.query.filter_by(email=email).first():
-            user = Usuario(
-                nome=f"Usuário {i}",
-                email=email,
-                senha=generate_password_hash("user123"),
-                is_admin=False
-            )
-            db.session.add(user)
-
-    # Filmes
-    titulos = ["Matrix", "O Senhor dos Anéis", "Interestelar", "Gladiador", "Avatar", "Top Gun", "Vingadores"]
-    anos = [1999, 2001, 2014, 2000, 2009, 1986, 2012]
-    for i in range(len(titulos)):
-        if not Filme.query.filter_by(titulo=titulos[i]).first():
-            db.session.add(Filme(titulo=titulos[i], ano=anos[i], disponivel=True))
-
-    db.session.commit()
-    print("✅ Dados de exemplo criados com sucesso")
+        ))
+        db.session.commit()
 EOF
 
-# Executar o seed
-python3 seed_data.py
+# Criar usuários aleatórios
+cat <<EOF > popular_usuarios.py
+from app import db
+from app.models import Usuario
+from werkzeug.security import generate_password_hash
+from run import app
+usuarios = [
+    {"nome": "João", "email": "joao@email.com"},
+    {"nome": "Maria", "email": "maria@email.com"},
+    {"nome": "Pedro", "email": "pedro@email.com"}
+]
+with app.app_context():
+    for u in usuarios:
+        if not Usuario.query.filter_by(email=u["email"]).first():
+            db.session.add(Usuario(
+                nome=u["nome"],
+                email=u["email"],
+                senha=generate_password_hash("teste123"),
+                is_admin=False
+            ))
+    db.session.commit()
+EOF
+
+# Criar filmes com cartazes
+cat <<EOF > popular_filmes.py
+from app import db
+from app.models import Filme
+from run import app
+filmes = [
+    {"titulo": "Interestelar", "ano": 2014, "cartaz_url": "https://m.media-amazon.com/images/I/71n58PKBFiL._AC_UF894,1000_QL80_.jpg"},
+    {"titulo": "O Poderoso Chefão", "ano": 1972, "cartaz_url": "https://m.media-amazon.com/images/I/81lZMFwwg5L._AC_UF1000,1000_QL80_.jpg"},
+    {"titulo": "Batman: O Cavaleiro das Trevas", "ano": 2008, "cartaz_url": "https://m.media-amazon.com/images/I/71pH5SxCRWL._AC_UF894,1000_QL80_.jpg"},
+    {"titulo": "Forrest Gump", "ano": 1994, "cartaz_url": "https://m.media-amazon.com/images/I/61coc7ZMJyL._AC_UF1000,1000_QL80_.jpg"},
+    {"titulo": "Matrix", "ano": 1999, "cartaz_url": "https://m.media-amazon.com/images/I/81w+4xkUQdL._AC_UF894,1000_QL80_.jpg"}
+]
+with app.app_context():
+    for f in filmes:
+        if not Filme.query.filter_by(titulo=f["titulo"]).first():
+            db.session.add(Filme(
+                titulo=f["titulo"],
+                ano=f["ano"],
+                disponivel=True,
+                cartaz_url=f["cartaz_url"]
+            ))
+    db.session.commit()
+EOF
+
+# Executar scripts
+python3 create_admin.py
+python3 popular_usuarios.py
+python3 popular_filmes.py
 
 # Criar serviço systemd
 cat <<EOF > /etc/systemd/system/flaskapp.service
@@ -96,8 +118,7 @@ Restart=always
 WantedBy=multi-user.target
 EOF
 
-# Recarregar serviços e agendar inicialização
+# Ativar app no boot
 systemctl daemon-reexec
 systemctl daemon-reload
-
 echo "systemctl enable flaskapp && systemctl start flaskapp" | at now + 1 minute

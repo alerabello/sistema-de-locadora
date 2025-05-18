@@ -12,6 +12,10 @@
       <label for="ano" class="form-label">Ano</label>
       <input type="number" class="form-control" id="ano" name="ano" required>
     </div>
+    <div class="mb-3">
+      <label for="cartaz_url" class="form-label">URL do Cartaz</label>
+      <input type="url" class="form-control" id="cartaz_url" name="cartaz_url" placeholder="https://...">
+    </div>
     <button type="submit" class="btn btn-success">Cadastrar</button>
     <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Cancelar</a>
   </form>
