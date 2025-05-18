@@ -39,4 +39,20 @@
   </div>
 </div>
 
+<hr class="my-5">
+<h3 class="text-white text-center">🎬 Filmes em Destaque</h3>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
+  {% for filme in filmes %}
+  <div class="col">
+    <div class="card bg-dark border-secondary h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ filme.titulo }}</h5>
+        <p class="card-text">Ano: {{ filme.ano }}</p>
+        <span class="badge bg-success">Disponível</span>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
 {% endblock %}
