@@ -15,7 +15,7 @@
       <div class="form-check mb-2">
         {{ login_form.lembrar(class="form-check-input") }} {{ login_form.lembrar.label }}
       </div>
-      <button type="submit" class="btn btn-primary">Entrar</button>
+      <button type="submit" class="btn btn-primary" name="form" value="login">Entrar</button>
     </form>
   </div>
 
@@ -35,7 +35,7 @@
       <div class="mb-3">
         {{ cadastro_form.confirmar.label }} {{ cadastro_form.confirmar(class="form-control") }}
       </div>
-      <button type="submit" class="btn btn-success">Cadastrar</button>
+      <button type="submit" class="btn btn-success" name="form" value="cadastro">Cadastrar</button>
     </form>
   </div>
 </div>

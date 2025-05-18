@@ -12,14 +12,14 @@ def index():
     login_form = LoginForm()
     cadastro_form = CadastroForm()
 
-    if login_form.submit.data and login_form.validate_on_submit():
+    if request.form.get('form') == 'login' and login_form.validate_on_submit():
         usuario = Usuario.query.filter_by(email=login_form.email.data).first()
         if usuario and check_password_hash(usuario.senha, login_form.senha.data):
             login_user(usuario, remember=login_form.lembrar.data)
             return redirect(url_for('main.dashboard'))
         flash('Login inválido')
 
-    elif cadastro_form.submit.data and cadastro_form.validate_on_submit():
+    elif request.form.get('form') == 'cadastro' and cadastro_form.validate_on_submit():
         if Usuario.query.filter_by(email=cadastro_form.email.data).first():
             flash('Email já cadastrado. Faça login.')
         else:
