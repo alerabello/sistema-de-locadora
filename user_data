@@ -30,8 +30,30 @@ touch /home/ec2-user/sistema-de-locadora/instance/locadora.db
 chmod -R 775 /home/ec2-user/sistema-de-locadora/instance/
 chown -R ec2-user:ec2-user /home/ec2-user/sistema-de-locadora/instance/
 
-# Criar banco (executar app brevemente) e criar admin
+# Criar banco (executar app brevemente)
 python3 run.py & sleep 5 && pkill -f run.py
+
+# Criar usuário administrador diretamente
+cat <<EOF > create_admin.py
+from app import db
+from app.models import Usuario
+from werkzeug.security import generate_password_hash
+
+admin = Usuario.query.filter_by(email="admin@email.com").first()
+if not admin:
+    novo = Usuario(
+        nome="Administrador",
+        email="admin@email.com",
+        senha=generate_password_hash("admin123"),
+        is_admin=True
+    )
+    db.session.add(novo)
+    db.session.commit()
+    print("✅ Admin criado com sucesso")
+else:
+    print("⚠️ Admin já existe")
+EOF
+
 python3 create_admin.py
 
 # Criar serviço systemd
@@ -43,8 +65,8 @@ After=network.target
 [Service]
 User=ec2-user
 WorkingDirectory=/home/ec2-user/sistema-de-locadora
-Environment=\"FLASK_APP=run.py\"
-Environment=\"PATH=/home/ec2-user/sistema-de-locadora/venv/bin\"
+Environment="FLASK_APP=run.py"
+Environment="PATH=/home/ec2-user/sistema-de-locadora/venv/bin"
 ExecStart=/home/ec2-user/sistema-de-locadora/venv/bin/flask run --host=0.0.0.0 --port=5000
 Restart=always
 
