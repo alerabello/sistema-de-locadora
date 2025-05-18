@@ -14,7 +14,7 @@ def index():
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit():
         usuario = Usuario.query.filter_by(email=form.email.data).first()
         if usuario and check_password_hash(usuario.senha, form.senha.data):
             login_user(usuario, remember=form.lembrar.data)
@@ -25,7 +25,7 @@ def login():
 @main.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     form = CadastroForm()
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit():
         if Usuario.query.filter_by(email=form.email.data).first():
             flash('Email já cadastrado. Faça login.')
             return redirect(url_for('main.login'))
