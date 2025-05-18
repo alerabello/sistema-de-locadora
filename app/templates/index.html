@@ -46,7 +46,7 @@
   <div class="col">
     <div class="card bg-dark border-secondary h-100">
       {% if filme.cartaz_url %}
-      <img src="{{ filme.cartaz_url }}" class="card-img-top" alt="Cartaz de {{ filme.titulo }}">
+      <img src="{{ filme.cartaz_url }}" class="card-img-top" alt="Cartaz de {{ filme.titulo }}" style="max-height: 360px; object-fit: cover;">
       {% endif %}
       <div class="card-body">
         <h5 class="card-title">{{ filme.titulo }}</h5>
