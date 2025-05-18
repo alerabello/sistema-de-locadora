@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Novo Filme{% endblock %}
+{% block content %}
+<div class="container mt-5 text-white">
+  <h2>Cadastrar Novo Filme</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="titulo" class="form-label">Título</label>
+      <input type="text" class="form-control" id="titulo" name="titulo" required>
+    </div>
+    <div class="mb-3">
+      <label for="ano" class="form-label">Ano</label>
+      <input type="number" class="form-control" id="ano" name="ano" required>
+    </div>
+    <button type="submit" class="btn btn-success">Cadastrar</button>
+    <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

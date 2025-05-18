@@ -2,13 +2,27 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <div class="container mt-5 text-white">
-  <h2 class="mb-4">Bem-vindo, {{ current_user.nome }}</h2>
-  <p class="lead">Acesse as opções no menu para gerenciar clientes e locações.</p>
+  <h2>Bem-vindo, {{ current_user.nome }}</h2>
+  <p class="lead">Acesse as opções no menu para gerenciar o sistema.</p>
 
-  <div class="d-grid gap-2">
-    <a href="{{ url_for('main.clientes') }}" class="btn btn-outline-light">👤 Gerenciar Clientes</a>
-    <a href="{{ url_for('main.locacoes') }}" class="btn btn-outline-light">🎬 Gerenciar Locações</a>
-    <a href="{{ url_for('main.logout') }}" class="btn btn-danger">🚪 Sair</a>
-  </div>
+  <ul class="list-group list-group-flush">
+    {% if current_user.is_admin %}
+    <li class="list-group-item bg-dark">
+      <a href="{{ url_for('main.clientes') }}" class="text-white">👥 Gerenciar Clientes</a>
+    </li>
+    <li class="list-group-item bg-dark">
+      <a href="{{ url_for('main.locacoes') }}" class="text-white">🎬 Gerenciar Locações</a>
+    </li>
+    <li class="list-group-item bg-dark">
+      <a href="{{ url_for('main.usuarios') }}" class="text-white">👤 Gerenciar Usuários</a>
+    </li>
+    <li class="list-group-item bg-dark">
+      <a href="{{ url_for('main.novo_filme') }}" class="text-white">➕ Cadastrar Novo Filme</a>
+    </li>
+    {% endif %}
+    <li class="list-group-item bg-dark">
+      <a href="{{ url_for('main.logout') }}" class="text-white">🚪 Sair</a>
+    </li>
+  </ul>
 </div>
 {% endblock %}

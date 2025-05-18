@@ -57,6 +57,36 @@ def dashboard():
         filmes = Filme.query.filter_by(disponivel=True).all()
         return render_template('filmes.html', filmes=filmes)
 
+@main.route('/usuarios')
+@login_required
+def usuarios():
+    if not current_user.is_admin:
+        abort(403)
+    lista = Usuario.query.all()
+    return render_template('usuarios.html', usuarios=lista)
+
+@main.route('/usuarios/<int:id>/promover')
+@login_required
+def promover_usuario(id):
+    if not current_user.is_admin:
+        abort(403)
+    usuario = Usuario.query.get_or_404(id)
+    usuario.is_admin = True
+    db.session.commit()
+    flash("Usuário promovido a administrador.")
+    return redirect(url_for('main.usuarios'))
+
+@main.route('/usuarios/<int:id>/rebaixar')
+@login_required
+def rebaixar_usuario(id):
+    if not current_user.is_admin:
+        abort(403)
+    usuario = Usuario.query.get_or_404(id)
+    usuario.is_admin = False
+    db.session.commit()
+    flash("Permissões de administrador removidas.")
+    return redirect(url_for('main.usuarios'))
+
 @main.route('/clientes')
 @login_required
 def clientes():
@@ -153,3 +183,22 @@ def excluir_locacao(id):
     db.session.commit()
     flash("Locação excluída com sucesso.")
     return redirect(url_for('main.locacoes'))
+
+@main.route('/filmes/novo', methods=['GET', 'POST'])
+@login_required
+def novo_filme():
+    if not current_user.is_admin:
+        abort(403)
+
+    if request.method == 'POST':
+        titulo = request.form.get('titulo')
+        ano = request.form.get('ano')
+        if titulo and ano:
+            filme = Filme(titulo=titulo, ano=ano, disponivel=True)
+            db.session.add(filme)
+            db.session.commit()
+            flash("Filme cadastrado com sucesso.")
+            return redirect(url_for('main.dashboard'))
+        else:
+            flash("Preencha todos os campos.")
+    return render_template('novo_filme.html')
