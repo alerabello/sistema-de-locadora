@@ -9,7 +9,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    filmes = Filme.query.filter_by(disponivel=True).limit(3).all()
+    filmes = Filme.query.filter_by(disponivel=True).all()
     return render_template('index.html', filmes=filmes)
 
 @main.route('/login', methods=['GET', 'POST'])
