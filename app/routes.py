@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import db, Usuario, Cliente, Filme, Locacao, LocacaoFilme
@@ -32,7 +32,8 @@ def cadastro():
         novo = Usuario(
             nome=form.nome.data,
             email=form.email.data,
-            senha=generate_password_hash(form.senha.data)
+            senha=generate_password_hash(form.senha.data),
+            is_admin=False
         )
         db.session.add(novo)
         db.session.commit()
@@ -49,17 +50,25 @@ def logout():
 @main.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    if current_user.is_admin:
+        return render_template('dashboard.html')
+    else:
+        filmes = Filme.query.filter_by(disponivel=True).all()
+        return render_template('filmes.html', filmes=filmes)
 
 @main.route('/clientes')
 @login_required
 def clientes():
+    if not current_user.is_admin:
+        abort(403)
     lista = Cliente.query.all()
     return render_template('clientes.html', clientes=lista)
 
 @main.route('/clientes/novo', methods=['GET', 'POST'])
 @login_required
 def novo_cliente():
+    if not current_user.is_admin:
+        abort(403)
     form = ClienteForm()
     if form.validate_on_submit():
         cliente = Cliente(nome=form.nome.data, email=form.email.data, telefone=form.telefone.data)
@@ -72,6 +81,8 @@ def novo_cliente():
 @main.route('/clientes/<int:id>/editar', methods=['GET', 'POST'])
 @login_required
 def editar_cliente(id):
+    if not current_user.is_admin:
+        abort(403)
     cliente = Cliente.query.get_or_404(id)
     form = ClienteForm(obj=cliente)
     if form.validate_on_submit():
@@ -86,6 +97,8 @@ def editar_cliente(id):
 @main.route('/clientes/<int:id>/excluir')
 @login_required
 def excluir_cliente(id):
+    if not current_user.is_admin:
+        abort(403)
     cliente = Cliente.query.get_or_404(id)
     db.session.delete(cliente)
     db.session.commit()
@@ -95,6 +108,8 @@ def excluir_cliente(id):
 @main.route('/locacoes')
 @login_required
 def locacoes():
+    if not current_user.is_admin:
+        abort(403)
     lista = Locacao.query.all()
     return render_template('locacoes.html', locacoes=lista)
 
@@ -127,6 +142,8 @@ def nova_locacao():
 @main.route('/locacoes/<int:id>/excluir')
 @login_required
 def excluir_locacao(id):
+    if not current_user.is_admin:
+        abort(403)
     locacao = Locacao.query.get_or_404(id)
     for item in locacao.filmes:
         item.filme.disponivel = True
