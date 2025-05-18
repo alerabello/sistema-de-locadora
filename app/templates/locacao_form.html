@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block content %}
+  <h2>{{ titulo }}</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.cliente.label }} {{ form.cliente(class="form-select") }}
+    </div>
+    <div class="mb-3">
+      {{ form.data_devolucao.label }} {{ form.data_devolucao(class="form-control", type="date") }}
+    </div>
+    <label>{{ form.filmes.label }}</label>
+    <div class="form-check">
+      {% for subfield in form.filmes %}
+        <div class="form-check">
+          {{ subfield(class="form-check-input") }}
+          {{ subfield.label(class="form-check-label") }}
+        </div>
+      {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Salvar</button>
+    <a href="{{ url_for('main.locacoes') }}" class="btn btn-secondary mt-2">Cancelar</a>
+  </form>
+{% endblock %}
