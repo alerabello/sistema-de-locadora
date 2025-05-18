@@ -1,42 +1,42 @@
 {% extends 'base.html' %}
-{% block title %}Bem-vindo à Locadora{% endblock %}
+{% block title %}Locadora - Início{% endblock %}
 {% block content %}
-<div class="row">
-  <div class="col-md-6">
-    <h3>Login</h3>
-    <form method="POST" action="{{ url_for('main.index') }}">
-      {{ login_form.hidden_tag() }}
-      <div class="mb-3">
-        {{ login_form.email.label }} {{ login_form.email(class="form-control") }}
-      </div>
-      <div class="mb-3">
-        {{ login_form.senha.label }} {{ login_form.senha(class="form-control") }}
-      </div>
-      <div class="form-check mb-2">
-        {{ login_form.lembrar(class="form-check-input") }} {{ login_form.lembrar.label }}
-      </div>
-      <button type="submit" class="btn btn-primary" name="form" value="login">Entrar</button>
-    </form>
-  </div>
 
-  <div class="col-md-6">
-    <h3>Cadastro</h3>
-    <form method="POST" action="{{ url_for('main.index') }}">
-      {{ cadastro_form.hidden_tag() }}
-      <div class="mb-3">
-        {{ cadastro_form.nome.label }} {{ cadastro_form.nome(class="form-control") }}
-      </div>
-      <div class="mb-3">
-        {{ cadastro_form.email.label }} {{ cadastro_form.email(class="form-control") }}
-      </div>
-      <div class="mb-3">
-        {{ cadastro_form.senha.label }} {{ cadastro_form.senha(class="form-control") }}
-      </div>
-      <div class="mb-3">
-        {{ cadastro_form.confirmar.label }} {{ cadastro_form.confirmar(class="form-control") }}
-      </div>
-      <button type="submit" class="btn btn-success" name="form" value="cadastro">Cadastrar</button>
-    </form>
+<style>
+  body {
+    background-color: #141414;
+    color: #fff;
+  }
+
+  .hero {
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+
+  .hero .btn-group {
+    margin-top: 30px;
+  }
+
+  .hero .btn-group a {
+    min-width: 140px;
+  }
+</style>
+
+<div class="hero text-center">
+  <h1>Bem-vindo à Locadora</h1>
+  <p class="lead">Alugue seus filmes favoritos com facilidade</p>
+  <div class="btn-group">
+    <a href="{{ url_for('main.login') }}" class="btn btn-danger btn-lg mx-2">Entrar</a>
+    <a href="{{ url_for('main.cadastro') }}" class="btn btn-outline-light btn-lg mx-2">Cadastrar</a>
   </div>
 </div>
+
 {% endblock %}

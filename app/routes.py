@@ -7,32 +7,38 @@ from datetime import datetime
 
 main = Blueprint('main', __name__)
 
-@main.route('/', methods=['GET', 'POST'])
+@main.route('/')
 def index():
-    login_form = LoginForm()
-    cadastro_form = CadastroForm()
+    return render_template('index.html')
 
-    if request.form.get('form') == 'login' and login_form.validate_on_submit():
-        usuario = Usuario.query.filter_by(email=login_form.email.data).first()
-        if usuario and check_password_hash(usuario.senha, login_form.senha.data):
-            login_user(usuario, remember=login_form.lembrar.data)
+@main.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        usuario = Usuario.query.filter_by(email=form.email.data).first()
+        if usuario and check_password_hash(usuario.senha, form.senha.data):
+            login_user(usuario, remember=form.lembrar.data)
             return redirect(url_for('main.dashboard'))
         flash('Login inválido')
+    return render_template('login.html', form=form)
 
-    elif request.form.get('form') == 'cadastro' and cadastro_form.validate_on_submit():
-        if Usuario.query.filter_by(email=cadastro_form.email.data).first():
+@main.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    form = CadastroForm()
+    if form.validate_on_submit():
+        if Usuario.query.filter_by(email=form.email.data).first():
             flash('Email já cadastrado. Faça login.')
-        else:
-            novo = Usuario(
-                nome=cadastro_form.nome.data,
-                email=cadastro_form.email.data,
-                senha=generate_password_hash(cadastro_form.senha.data)
-            )
-            db.session.add(novo)
-            db.session.commit()
-            flash('Cadastro realizado com sucesso! Faça login.')
-
-    return render_template('index.html', login_form=login_form, cadastro_form=cadastro_form)
+            return redirect(url_for('main.login'))
+        novo = Usuario(
+            nome=form.nome.data,
+            email=form.email.data,
+            senha=generate_password_hash(form.senha.data)
+        )
+        db.session.add(novo)
+        db.session.commit()
+        flash('Cadastro realizado com sucesso! Faça login.')
+        return redirect(url_for('main.login'))
+    return render_template('cadastro.html', form=form)
 
 @main.route('/logout')
 @login_required
