@@ -65,6 +65,7 @@ def novo_cliente():
         cliente = Cliente(nome=form.nome.data, email=form.email.data, telefone=form.telefone.data)
         db.session.add(cliente)
         db.session.commit()
+        flash("Cliente cadastrado com sucesso.")
         return redirect(url_for('main.clientes'))
     return render_template('cliente_form.html', form=form, titulo="Novo Cliente")
 
@@ -78,6 +79,7 @@ def editar_cliente(id):
         cliente.email = form.email.data
         cliente.telefone = form.telefone.data
         db.session.commit()
+        flash("Cliente atualizado com sucesso.")
         return redirect(url_for('main.clientes'))
     return render_template('cliente_form.html', form=form, titulo="Editar Cliente")
 
@@ -87,6 +89,7 @@ def excluir_cliente(id):
     cliente = Cliente.query.get_or_404(id)
     db.session.delete(cliente)
     db.session.commit()
+    flash("Cliente excluído com sucesso.")
     return redirect(url_for('main.clientes'))
 
 @main.route('/locacoes')
@@ -116,6 +119,7 @@ def nova_locacao():
             db.session.add(LocacaoFilme(locacao_id=locacao.id, filme_id=filme_id))
 
         db.session.commit()
+        flash("Locação registrada com sucesso.")
         return redirect(url_for('main.locacoes'))
 
     return render_template('locacao_form.html', form=form, titulo="Nova Locação")
@@ -129,4 +133,5 @@ def excluir_locacao(id):
         db.session.delete(item)
     db.session.delete(locacao)
     db.session.commit()
+    flash("Locação excluída com sucesso.")
     return redirect(url_for('main.locacoes'))

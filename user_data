@@ -45,5 +45,12 @@ Restart=always
 WantedBy=multi-user.target
 EOF
 
+# Permissões para o banco SQLite
+chmod -R 775 /home/ec2-user/sistema-de-locadora/instance/
+chown -R ec2-user:ec2-user /home/ec2-user/sistema-de-locadora/instance/
+
+# Criar admin se não existir
+python3 create_admin.py
+
 # Agendar ativação via 'at' (1 minuto após o boot)
 echo "systemctl daemon-reexec && systemctl daemon-reload && systemctl enable flaskapp && systemctl start flaskapp" | at now + 1 minute

@@ -1,27 +1,36 @@
 {% extends 'base.html' %}
 {% block title %}Locações{% endblock %}
 {% block content %}
+<div class="container mt-5 text-white">
   <h2>Locações</h2>
-  <a href="{{ url_for('main.nova_locacao') }}" class="btn btn-success mb-2">Nova Locação</a>
-  <table class="table table-bordered">
-    <tr><th>Cliente</th><th>Data Locação</th><th>Devolução</th><th>Filmes</th><th>Ações</th></tr>
-    {% for loc in locacoes %}
+  <a href="{{ url_for('main.nova_locacao') }}" class="btn btn-success mb-3">Nova Locação</a>
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Data Devolução</th>
+        <th>Filmes</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for loc in locacoes %}
       <tr>
         <td>{{ loc.cliente.nome }}</td>
-        <td>{{ loc.data_locacao.strftime("%d/%m/%Y") }}</td>
-        <td>{{ loc.data_devolucao.strftime("%d/%m/%Y") if loc.data_devolucao else '' }}</td>
+        <td>{{ loc.data_devolucao.strftime('%d/%m/%Y') }}</td>
         <td>
           <ul>
             {% for item in loc.filmes %}
-              <li>{{ item.filme.titulo }}</li>
+            <li>{{ item.filme.titulo }}</li>
             {% endfor %}
           </ul>
         </td>
         <td>
-          <a href="{{ url_for('main.excluir_locacao', id=loc.id) }}" class="btn btn-danger btn-sm">Excluir</a>
+          <a href="{{ url_for('main.excluir_locacao', id=loc.id) }}" class="btn btn-sm btn-danger">Excluir</a>
         </td>
       </tr>
-    {% endfor %}
+      {% endfor %}
+    </tbody>
   </table>
-  <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Voltar</a>
+</div>
 {% endblock %}
