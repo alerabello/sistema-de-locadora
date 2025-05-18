@@ -1,12 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Clientes{% endblock %}
 {% block content %}
-<style>
-  body {
-    background-color: #141414;
-    color: #fff;
-  }
-</style>
 <div class="container mt-5 text-white">
   <h2 class="mb-4">📋 Lista de Clientes</h2>
   <a href="{{ url_for('main.novo_cliente') }}" class="btn btn-success mb-3">+ Novo Cliente</a>
