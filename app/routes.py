@@ -147,46 +147,56 @@ def locacoes():
 @main.route('/locacoes/nova', methods=['GET', 'POST'])
 @login_required
 def nova_locacao():
-    clientes = Cliente.query.all()
-    filmes = Filme.query.all()
-    if request.method == 'POST':
-        cliente_id = request.form['cliente_id']
-        data_retirada = request.form['data_retirada']
-        data_devolucao = request.form['data_devolucao']
-        filmes_ids = request.form.getlist('filmes')
-        locacao = Locacao(cliente_id=cliente_id, data_retirada=data_retirada, data_devolucao=data_devolucao)
-        db.session.add(locacao)
+    if not current_user.is_admin:
+        abort(403)
+    form = LocacaoForm()
+    form.cliente.choices = [(c.id, c.nome) for c in Cliente.query.all()]
+    form.filmes.choices = [(f.id, f.titulo) for f in Filme.query.filter_by(disponivel=True).all()]
+    if form.validate_on_submit():
+        nova = Locacao(cliente_id=form.cliente.data, data_devolucao=form.data_devolucao.data)
+        db.session.add(nova)
         db.session.commit()
-        for filme_id in filmes_ids:
-            locacao.filmes.append(Filme.query.get(int(filme_id)))
+        for filme_id in form.filmes.data:
+            db.session.add(LocacaoFilme(locacao_id=nova.id, filme_id=filme_id))
         db.session.commit()
-        return redirect(url_for('listar_locacoes'))
-    return render_template('locacao_form.html', clientes=clientes, filmes=filmes)
+        flash("Locação registrada com sucesso.")
+        return redirect(url_for('main.locacoes'))
+    return render_template('locacao_form.html', form=form, titulo="Nova Locação")
 
 @main.route('/locacoes/<int:id>/editar', methods=['GET', 'POST'])
 @login_required
 def editar_locacao(id):
+    if not current_user.is_admin:
+        abort(403)
     locacao = Locacao.query.get_or_404(id)
-    clientes = Cliente.query.all()
-    filmes = Filme.query.all()
-    if request.method == 'POST':
-        locacao.cliente_id = request.form['cliente_id']
-        locacao.data_retirada = request.form['data_retirada']
-        locacao.data_devolucao = request.form['data_devolucao']
-        locacao.filmes.clear()
-        for filme_id in request.form.getlist('filmes'):
-            locacao.filmes.append(Filme.query.get(int(filme_id)))
+    form = LocacaoForm()
+    form.cliente.choices = [(c.id, c.nome) for c in Cliente.query.all()]
+    form.filmes.choices = [(f.id, f.titulo) for f in Filme.query.all()]
+    if request.method == 'GET':
+        form.cliente.data = locacao.cliente_id
+        form.data_devolucao.data = locacao.data_devolucao
+        form.filmes.data = [lf.filme_id for lf in locacao.filmes]
+    if form.validate_on_submit():
+        locacao.cliente_id = form.cliente.data
+        locacao.data_devolucao = form.data_devolucao.data
+        db.session.query(LocacaoFilme).filter_by(locacao_id=locacao.id).delete()
+        for filme_id in form.filmes.data:
+            db.session.add(LocacaoFilme(locacao_id=locacao.id, filme_id=filme_id))
         db.session.commit()
-        return redirect(url_for('listar_locacoes'))
-    return render_template('locacao_form.html', locacao=locacao, clientes=clientes, filmes=filmes)
+        flash("Locação atualizada com sucesso.")
+        return redirect(url_for('main.locacoes'))
+    return render_template('locacao_form.html', form=form, titulo="Editar Locação")
 
 @main.route('/locacoes/<int:id>/excluir', methods=['POST'])
 @login_required
 def excluir_locacao(id):
+    if not current_user.is_admin:
+        abort(403)
     locacao = Locacao.query.get_or_404(id)
     db.session.delete(locacao)
     db.session.commit()
-    return redirect(url_for('listar_locacoes'))
+    flash("Locação excluída com sucesso.")
+    return redirect(url_for('main.locacoes'))
 
 @main.route('/filmes')
 @login_required
@@ -201,7 +211,6 @@ def listar_filmes():
 def novo_filme():
     if not current_user.is_admin:
         abort(403)
-
     if request.method == 'POST':
         titulo = request.form.get('titulo')
         ano = request.form.get('ano')
@@ -214,7 +223,6 @@ def novo_filme():
             return redirect(url_for('main.dashboard'))
         else:
             flash("Preencha todos os campos.")
-
     return render_template('novo_filme.html', titulo="Novo Filme", show_back_button=True)
 
 @main.route('/filmes/<int:id>/excluir')
@@ -227,7 +235,7 @@ def excluir_filme(id):
     db.session.commit()
     flash("Filme excluído com sucesso.")
     return redirect(url_for('main.listar_filmes'))
-    
+
 @main.cli.command("seed_filmes")
 def seed_filmes():
     exemplos = [
