@@ -27,6 +27,7 @@ Este é um sistema web desenvolvido com Flask, seguindo princípios de Engenhari
 - **ChromeDriver**: Compatível com a versão do Chrome instalada
 - **pip**: 20.0 ou superior
 - **Sistema Operacional**: Linux, Windows ou macOS
+- **PostgreSQL**: Versão 15 ou superior
 
 ---
 
