@@ -236,6 +236,35 @@ def excluir_filme(id):
     flash("Filme excluído com sucesso.")
     return redirect(url_for('main.listar_filmes'))
 
+@main.route('/locar', methods=['POST'])
+@login_required
+def locar_filme_usuario():
+    if current_user.is_admin:
+        abort(403)
+    filmes_ids = request.form.getlist('filmes')
+    data_devolucao = request.form.get('data_devolucao')
+    if not filmes_ids or not data_devolucao:
+        flash("Selecione pelo menos um filme e informe a data de devolução.")
+        return redirect(url_for('main.dashboard'))
+    # Cria cliente se não existir
+    cliente = Cliente.query.filter_by(email=current_user.email).first()
+    if not cliente:
+        cliente = Cliente(nome=current_user.nome, email=current_user.email)
+        db.session.add(cliente)
+        db.session.commit()
+    # Cria locação
+    locacao = Locacao(
+        cliente_id=cliente.id,
+        data_devolucao=datetime.strptime(data_devolucao, "%Y-%m-%d")
+    )
+    db.session.add(locacao)
+    db.session.commit()
+    for filme_id in filmes_ids:
+        db.session.add(LocacaoFilme(locacao_id=locacao.id, filme_id=int(filme_id)))
+    db.session.commit()
+    flash("Locação realizada com sucesso.")
+    return redirect(url_for('main.dashboard'))
+
 @main.cli.command("seed_filmes")
 def seed_filmes():
     exemplos = [
