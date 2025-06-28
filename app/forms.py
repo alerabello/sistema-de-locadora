@@ -31,3 +31,8 @@ class LocacaoForm(FlaskForm):
     filmes = MultiCheckboxField('Filmes', coerce=int, validators=[DataRequired()])
     data_devolucao = DateField('Data de Devolução', format='%Y-%m-%d', validators=[DataRequired()])
     submit = SubmitField('Salvar')
+
+class PerfilForm(FlaskForm):
+    nome = StringField('Nome', validators=[DataRequired(), Length(min=2, max=100)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Salvar')

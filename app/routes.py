@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import db, Usuario, Cliente, Filme, Locacao, LocacaoFilme
-from .forms import LoginForm, CadastroForm, ClienteForm, LocacaoForm
+from .forms import LoginForm, CadastroForm, ClienteForm, LocacaoForm, PerfilForm
 from datetime import datetime
 
 main = Blueprint('main', __name__)
@@ -52,10 +52,19 @@ def logout():
 @login_required
 def dashboard():
     if current_user.is_admin:
-        return render_template('dashboard.html')
+        total_clientes = Cliente.query.count()
+        total_filmes = Filme.query.count()
+        total_locacoes = Locacao.query.count()
+        total_usuarios = Usuario.query.count()
+        return render_template(
+            'dashboard.html',
+            total_clientes=total_clientes,
+            total_filmes=total_filmes,
+            total_locacoes=total_locacoes,
+            total_usuarios=total_usuarios,
+        )
     else:
-        filmes = Filme.query.filter_by(disponivel=True).all()
-        return render_template('filmes.html', filmes=filmes, show_back_button=True)
+        return render_template('painel_cliente.html')
 
 @main.route('/usuarios')
 @login_required
@@ -264,6 +273,28 @@ def locar_filme_usuario():
     db.session.commit()
     flash("Locação realizada com sucesso.")
     return redirect(url_for('main.dashboard'))
+
+@main.route('/filmes_disponiveis')
+@login_required
+def filmes_disponiveis():
+    if current_user.is_admin:
+        abort(403)
+    filmes = Filme.query.filter_by(disponivel=True).all()
+    return render_template('filmes.html', filmes=filmes, show_back_button=True)
+
+@main.route('/perfil', methods=['GET', 'POST'])
+@login_required
+def perfil():
+    if current_user.is_admin:
+        abort(403)
+    form = PerfilForm(obj=current_user)
+    if form.validate_on_submit():
+        current_user.nome = form.nome.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Perfil atualizado com sucesso.')
+        return redirect(url_for('main.perfil'))
+    return render_template('perfil.html', form=form, show_back_button=True)
 
 @main.cli.command("seed_filmes")
 def seed_filmes():

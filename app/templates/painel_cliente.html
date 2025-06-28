@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Painel do Cliente{% endblock %}
+{% block content %}
+<div class="container mt-5 text-white">
+  <h2>Bem-vindo, {{ current_user.nome }}</h2>
+  <p class="lead">Escolha uma opção abaixo.</p>
+  <ul class="list-group list-group-flush mt-4">
+    <li class="list-group-item bg-dark">
+      <a href="{{ url_for('main.filmes_disponiveis') }}" class="btn btn-outline-light">🎬 Locar Filmes</a>
+    </li>
+    <li class="list-group-item bg-dark">
+      <a href="{{ url_for('main.perfil') }}" class="btn btn-outline-light">✏️ Editar Perfil</a>
+    </li>
+    <li class="list-group-item bg-dark">
+      <a href="{{ url_for('main.logout') }}" class="btn btn-outline-light">🚪 Sair</a>
+    </li>
+  </ul>
+</div>
+{% endblock %}

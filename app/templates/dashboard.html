@@ -10,6 +10,41 @@
   </h2>
   <p class="lead">Acesse as opções abaixo para gerenciar o sistema.</p>
 
+  <div class="row text-center my-4">
+    <div class="col">
+      <div class="card bg-dark border-secondary">
+        <div class="card-body">
+          <h5 class="card-title">Clientes</h5>
+          <p class="card-text display-6">{{ total_clientes }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card bg-dark border-secondary">
+        <div class="card-body">
+          <h5 class="card-title">Filmes</h5>
+          <p class="card-text display-6">{{ total_filmes }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card bg-dark border-secondary">
+        <div class="card-body">
+          <h5 class="card-title">Locações</h5>
+          <p class="card-text display-6">{{ total_locacoes }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card bg-dark border-secondary">
+        <div class="card-body">
+          <h5 class="card-title">Usuários</h5>
+          <p class="card-text display-6">{{ total_usuarios }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <ul class="list-group list-group-flush mt-4">
     <li class="list-group-item bg-dark">
       <a href="{{ url_for('main.clientes') }}" class="btn btn-outline-light">👥 Gerenciar Clientes</a>
