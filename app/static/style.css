@@ -74,3 +74,8 @@ a, label, .form-label {
     background-color: #232323 !important;
     border: none;
 }
+
+input, select, textarea {
+    color: #fff !important;
+    background-color: #232323 !important;
+}
