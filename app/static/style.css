@@ -1,0 +1,23 @@
+body {
+    background-color: #141414;
+    color: #fff;
+    min-height: 100vh;
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.card {
+    background-color: #1f1f1f;
+}
+
+.btn-danger {
+    background-color: #e50914;
+    border-color: #e50914;
+}
+
+.btn-danger:hover {
+    background-color: #f6121d;
+    border-color: #f6121d;
+}

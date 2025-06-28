@@ -1,29 +1,33 @@
 {% extends 'base.html' %}
 {% block title %}Login{% endblock %}
 {% block content %}
-<div class="container mt-5 text-white">
-  <h2>Login</h2>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <div class="alert alert-warning mt-3">
-        {% for message in messages %}
-          <div>{{ message }}</div>
-        {% endfor %}
-      </div>
-    {% endif %}
-  {% endwith %}
-  <form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="mb-3">
-      {{ form.email.label }} {{ form.email(class="form-control") }}
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card border-secondary" style="min-width:340px;">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Login</h2>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="alert alert-warning">
+            {% for message in messages %}
+              <div>{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          {{ form.email.label }} {{ form.email(class="form-control") }}
+        </div>
+        <div class="mb-3">
+          {{ form.senha.label }} {{ form.senha(class="form-control") }}
+        </div>
+        <div class="form-check mb-3">
+          {{ form.lembrar(class="form-check-input") }} {{ form.lembrar.label }}
+        </div>
+        {{ form.submit(class="btn btn-danger w-100") }}
+      </form>
     </div>
-    <div class="mb-3">
-      {{ form.senha.label }} {{ form.senha(class="form-control") }}
-    </div>
-    <div class="form-check mb-3">
-      {{ form.lembrar(class="form-check-input") }} {{ form.lembrar.label }}
-    </div>
-    {{ form.submit(class="btn btn-primary") }}
-  </form>
+  </div>
 </div>
 {% endblock %}
