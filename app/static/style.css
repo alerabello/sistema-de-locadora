@@ -4,78 +4,38 @@ body {
     min-height: 100vh;
 }
 
-a, label, .form-label {
-    color: #fff;
-}
-
-.navbar-brand {
-    font-weight: 700;
-}
-
-.card {
-    background-color: #1f1f1f;
-    border: 1px solid #333;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-    transition: transform 0.1s;
-}
-
-.card:hover {
-    transform: translateY(-4px) scale(1.02);
-}
-
-.btn-danger {
-    background-color: #e50914;
-    border-color: #e50914;
-}
-
-.btn-danger:hover, .btn-danger:focus {
-    background-color: #f6121d;
-    border-color: #f6121d;
-}
-
-.btn-outline-light {
-    border-color: #fff;
-    color: #fff;
-}
-
-.btn-outline-light:hover, .btn-outline-light:focus {
-    background-color: #fff;
-    color: #141414;
-}
-
-.table {
-    color: #fff;
-    background-color: #1f1f1f;
-}
-
-.table th, .table td {
-    border-color: #444;
-}
-
-.form-control, .form-select {
-    background-color: #232323;
+a, label, .form-label, .form-check-label, .nav-link, .navbar-brand, h1, h2, h3, h4, h5, h6, p, .lead {
     color: #fff !important;
-    border: 1px solid #444;
-    transition: all 0.2s;
 }
 
-.form-control:focus, .form-select:focus {
-    border-color: #e50914;
-    box-shadow: none;
-}
-
-.alert-warning {
-    background-color: #ffc107;
-    color: #000;
-    border: none;
-}
-
-.list-group-item.bg-dark {
+input, select, textarea, .form-control, .form-select {
     background-color: #232323 !important;
-    border: none;
-}
-
-input, select, textarea {
     color: #fff !important;
-    background-color: #232323 !important;
+    border: 1px solid #444 !important;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #bbb !important;
+    opacity: 1;
+}
+
+.btn, .btn-danger, .btn-primary, .btn-success, .btn-secondary, .btn-outline-light {
+    color: #fff !important;
+}
+
+.table, .table th, .table td {
+    color: #fff !important;
+    background-color: #1f1f1f !important;
+    border-color: #444 !important;
+}
+
+.card, .list-group-item {
+    background-color: #1f1f1f !important;
+    color: #fff !important;
+}
+
+.alert-warning, .alert {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+    border: none;
 }
