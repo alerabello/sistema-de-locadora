@@ -3,59 +3,60 @@
 {% block content %}
 
 <style>
-  .hero {
-    height: 70vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .hero h1 {
-    font-size: 3rem;
-    font-weight: bold;
-  }
-
-  .hero .btn-group {
-    margin-top: 30px;
-  }
-
-  .hero .btn-group a {
-    min-width: 140px;
-  }
-
-  .card-img-top {
-    max-height: 350px;
-    object-fit: cover;
-  }
+.hero {
+  background: linear-gradient(120deg, #e50914 0%, #141414 100%);
+  color: #fff;
+  padding: 60px 0 40px 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  margin-bottom: 40px;
+}
+.hero h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.hero p {
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+}
+.hero .btn-group a {
+  margin-right: 10px;
+}
+.card-img-top {
+  height: 320px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
 </style>
 
 <div class="hero text-center">
-  <h1>Bem-vindo à Locadora</h1>
-  <p class="lead">Alugue seus filmes favoritos com facilidade</p>
+  <h1>Bem-vindo à Locadora de Filmes</h1>
+  <p>Assista aos melhores lançamentos e clássicos. Cadastre-se ou faça login para alugar seus filmes favoritos!</p>
   <div class="btn-group">
-    <a href="{{ url_for('main.login') }}" class="btn btn-danger btn-lg mx-2">Entrar</a>
-    <a href="{{ url_for('main.cadastro') }}" class="btn btn-outline-light btn-lg mx-2">Cadastrar</a>
+    <a href="{{ url_for('main.cadastro') }}" class="btn btn-danger btn-lg">Criar Conta</a>
+    <a href="{{ url_for('main.login') }}" class="btn btn-outline-light btn-lg">Entrar</a>
   </div>
 </div>
 
 <hr class="my-5">
-<h3 class="text-white text-center">🎬 Filmes em Destaque</h3>
+<h3 class="text-white text-center mb-4">🎬 Filmes em Destaque</h3>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
   {% for filme in filmes %}
   <div class="col">
-    <div class="card bg-dark border-secondary h-100">
-      {% if filme.cartaz_url %}
-      <img src="{{ filme.cartaz_url }}" class="card-img-top" alt="Cartaz de {{ filme.titulo }}" style="max-height: 360px; object-fit: cover;">
-      {% endif %}
+    <div class="card h-100">
+      <img src="{{ filme.cartaz_url or url_for('static', filename='default_movie.jpg') }}" class="card-img-top" alt="{{ filme.titulo }}">
       <div class="card-body">
         <h5 class="card-title">{{ filme.titulo }}</h5>
-        <p class="card-text">Ano: {{ filme.ano }}</p>
-        <span class="badge bg-success">Disponível</span>
+        <p class="card-text text-secondary mb-2">{{ filme.genero }} | {{ filme.ano }}</p>
+        <a href="{{ url_for('main.login') }}" class="btn btn-danger w-100">Alugar</a>
       </div>
     </div>
   </div>
   {% endfor %}
+  {% if not filmes %}
+    <p class="text-center text-muted">Nenhum filme cadastrado ainda.</p>
+  {% endif %}
 </div>
 
 {% endblock %}
