@@ -6,27 +6,27 @@ filmes_exemplo = [
     {
         "titulo": "Interestelar",
         "ano": 2014,
-        "cartaz_url": "https://m.media-amazon.com/images/I/71n58PKBFiL._AC_UF894,1000_QL80_.jpg"
+        "cartaz_url": "https://upload.wikimedia.org/wikipedia/pt/thumb/3/3a/Interstellar_Filme.png/250px-Interstellar_Filme.png"
     },
     {
         "titulo": "O Poderoso Chefão",
         "ano": 1972,
-        "cartaz_url": "https://m.media-amazon.com/images/I/81lZMFwwg5L._AC_UF1000,1000_QL80_.jpg"
+        "cartaz_url": "https://upload.wikimedia.org/wikipedia/pt/d/de/Godfather_1972.jpg"
     },
     {
         "titulo": "Batman: O Cavaleiro das Trevas",
         "ano": 2008,
-        "cartaz_url": "https://m.media-amazon.com/images/I/71pH5SxCRWL._AC_UF894,1000_QL80_.jpg"
+        "cartaz_url": "https://upload.wikimedia.org/wikipedia/pt/d/d1/The_Dark_Knight.jpg"
     },
     {
         "titulo": "Forrest Gump",
         "ano": 1994,
-        "cartaz_url": "https://m.media-amazon.com/images/I/61coc7ZMJyL._AC_UF1000,1000_QL80_.jpg"
+        "cartaz_url": "https://upload.wikimedia.org/wikipedia/pt/c/c0/ForrestGumpPoster.jpg"
     },
     {
         "titulo": "Matrix",
         "ano": 1999,
-        "cartaz_url": "https://m.media-amazon.com/images/I/81w+4xkUQdL._AC_UF894,1000_QL80_.jpg"
+        "cartaz_url": "https://upload.wikimedia.org/wikipedia/pt/c/c1/The_Matrix_Poster.jpg"
     }
 ]
 
